@@ -41,8 +41,11 @@ public class EventRestController {
         return LogisticsMapper.toDto(saved);
     }
     @GetMapping("/getLogs/{d1}/{d2}")
-    public List<LogisticsDTO> getLogistiquesDates (@PathVariable("d1") LocalDate date_debut, @PathVariable("d2") LocalDate date_fin){
-        return eventServices.getLogisticsDates(date_debut, date_fin)
+    public List<LogisticsDTO> getLogistiquesDates(
+            @PathVariable("d1") LocalDate startDate,
+            @PathVariable("d2") LocalDate endDate) {
+
+        return eventServices.getLogisticsDates(startDate, endDate)
                 .stream()
                 .map(LogisticsMapper::toDto)
                 .collect(Collectors.toList());

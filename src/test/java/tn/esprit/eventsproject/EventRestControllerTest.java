@@ -10,8 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tn.esprit.eventsproject.controllers.EventRestController;
 import tn.esprit.eventsproject.dto.EventDTO;
+import tn.esprit.eventsproject.dto.LogisticsDTO;
 import tn.esprit.eventsproject.dto.ParticipantDTO;
 import tn.esprit.eventsproject.entities.Event;
+import tn.esprit.eventsproject.entities.Logistics;
 import tn.esprit.eventsproject.entities.Participant;
 import tn.esprit.eventsproject.entities.Tache;
 import tn.esprit.eventsproject.services.IEventServices;
@@ -19,6 +21,7 @@ import tn.esprit.eventsproject.services.IEventServices;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventRestController.class)
@@ -71,4 +74,27 @@ class EventRestControllerTest {
                 .andExpect(jsonPath("$.dateDebut").value("2025-06-01"))
                 .andExpect(jsonPath("$.dateFin").value("2025-06-02"));
     }
+    @Test
+    void testAddAffectLog() throws Exception {
+        LogisticsDTO dto = new LogisticsDTO("Écran", true, 150.0f, 2);
+
+        Logistics saved = new Logistics();
+        saved.setDescription("Écran");
+        saved.setReserve(true);
+        saved.setPrixUnit(150.0f);
+        saved.setQuantite(2);
+
+        Mockito.when(eventServices.addAffectLog(Mockito.any(Logistics.class), Mockito.eq("DevFest")))
+                .thenReturn(saved);
+
+        mockMvc.perform(put("/event/addAffectLog/DevFest")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description").value("Écran"))
+                .andExpect(jsonPath("$.reserve").value(true))
+                .andExpect(jsonPath("$.prixUnit").value(150.0))
+                .andExpect(jsonPath("$.quantite").value(2));
+    }
+
 }

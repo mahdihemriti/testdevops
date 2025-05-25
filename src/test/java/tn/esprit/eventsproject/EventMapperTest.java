@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EventMapperTest {
+class EventMapperTest {
     @Test
     void testToEntity() {
         LocalDate start = LocalDate.of(2025, 5, 1);

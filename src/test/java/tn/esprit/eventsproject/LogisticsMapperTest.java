@@ -8,7 +8,7 @@ import tn.esprit.eventsproject.mapper.LogisticsMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LogisticsMapperTest {
+class LogisticsMapperTest {
     @Test
     void testToEntity() {
         LogisticsDTO dto = new LogisticsDTO("Chaises", true, 50.0f, 5);

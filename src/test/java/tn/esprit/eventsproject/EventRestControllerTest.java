@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventRestController.class)
-public class EventRestControllerTest {
+class EventRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

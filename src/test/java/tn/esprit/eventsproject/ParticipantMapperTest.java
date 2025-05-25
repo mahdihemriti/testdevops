@@ -8,7 +8,7 @@ import tn.esprit.eventsproject.mapper.ParticipantMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ParticipantMapperTest {
+class ParticipantMapperTest {
     @Test
     void testToEntity() {
         ParticipantDTO dto = new ParticipantDTO("Ali", "Ben Ali", Tache.ORGANISATEUR);

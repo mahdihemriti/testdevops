@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        SONAR_TOKEN = credentials('sonar-token')       // Optionnel pour plus tard
-        DOCKER_USER = credentials('dockerhub-user')    // Optionnel pour plus tard
-        DOCKER_PASS = credentials('dockerhub-pass')    // Optionnel pour plus tard
-    }
-
     stages {
         stage("Git Checkout") {
             steps {

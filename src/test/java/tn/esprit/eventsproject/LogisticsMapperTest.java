@@ -5,8 +5,7 @@ import tn.esprit.eventsproject.dto.LogisticsDTO;
 import tn.esprit.eventsproject.entities.Logistics;
 import tn.esprit.eventsproject.mapper.LogisticsMapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LogisticsMapperTest {
     @Test
@@ -34,6 +33,17 @@ class LogisticsMapperTest {
         assertTrue(dto.isReserve());
         assertEquals(100.0f, dto.getPrixUnit());
         assertEquals(10, dto.getQuantite());
+    }
+
+    @Test
+    void testToEntityWithEmptyDTO() {
+        LogisticsDTO dto = new LogisticsDTO();
+        Logistics entity = LogisticsMapper.toEntity(dto);
+
+        assertNull(entity.getDescription());
+        assertFalse(entity.isReserve());
+        assertEquals(0.0f, entity.getPrixUnit());
+        assertEquals(0, entity.getQuantite());
     }
 
 }

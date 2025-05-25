@@ -9,10 +9,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tn.esprit.eventsproject.controllers.EventRestController;
+import tn.esprit.eventsproject.dto.EventDTO;
 import tn.esprit.eventsproject.dto.ParticipantDTO;
+import tn.esprit.eventsproject.entities.Event;
 import tn.esprit.eventsproject.entities.Participant;
 import tn.esprit.eventsproject.entities.Tache;
 import tn.esprit.eventsproject.services.IEventServices;
+
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,5 +50,25 @@ class EventRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nom").value("Ali"))
                 .andExpect(jsonPath("$.prenom").value("Ben Ali"));
+    }
+    @Test
+    void testAddEvent() throws Exception {
+        EventDTO dto = new EventDTO("Conférence DevOps", LocalDate.of(2025, 6, 1), LocalDate.of(2025, 6, 2));
+
+        Event returned = new Event();
+        returned.setDescription("Conférence DevOps");
+        returned.setDateDebut(LocalDate.of(2025, 6, 1));
+        returned.setDateFin(LocalDate.of(2025, 6, 2));
+
+        Mockito.when(eventServices.addAffectEvenParticipant(Mockito.any(Event.class)))
+                .thenReturn(returned);
+
+        mockMvc.perform(post("/event/addEvent")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description").value("Conférence DevOps"))
+                .andExpect(jsonPath("$.dateDebut").value("2025-06-01"))
+                .andExpect(jsonPath("$.dateFin").value("2025-06-02"));
     }
 }

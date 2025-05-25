@@ -3,16 +3,19 @@ package tn.esprit.eventsproject.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.eventsproject.dto.EventDTO;
+import tn.esprit.eventsproject.dto.LogisticsDTO;
 import tn.esprit.eventsproject.dto.ParticipantDTO;
 import tn.esprit.eventsproject.entities.Event;
 import tn.esprit.eventsproject.entities.Logistics;
 import tn.esprit.eventsproject.entities.Participant;
 import tn.esprit.eventsproject.mapper.EventMapper;
+import tn.esprit.eventsproject.mapper.LogisticsMapper;
 import tn.esprit.eventsproject.mapper.ParticipantMapper;
 import tn.esprit.eventsproject.services.IEventServices;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("event")
@@ -33,11 +36,15 @@ public class EventRestController {
         return eventServices.addAffectEvenParticipant(EventMapper.toEntity(dto));
     }
     @PutMapping("/addAffectLog/{description}")
-    public Logistics addAffectLog(@RequestBody Logistics logistics,@PathVariable("description") String descriptionEvent){
-        return eventServices.addAffectLog(logistics,descriptionEvent);
+    public LogisticsDTO addAffectLog(@RequestBody LogisticsDTO dto, @PathVariable("description") String descriptionEvent) {
+        Logistics saved = eventServices.addAffectLog(LogisticsMapper.toEntity(dto), descriptionEvent);
+        return LogisticsMapper.toDto(saved);
     }
     @GetMapping("/getLogs/{d1}/{d2}")
-    public List<Logistics> getLogistiquesDates (@PathVariable("d1") LocalDate date_debut, @PathVariable("d2") LocalDate date_fin){
-        return eventServices.getLogisticsDates(date_debut,date_fin);
+    public List<LogisticsDTO> getLogistiquesDates (@PathVariable("d1") LocalDate date_debut, @PathVariable("d2") LocalDate date_fin){
+        return eventServices.getLogisticsDates(date_debut, date_fin)
+                .stream()
+                .map(LogisticsMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

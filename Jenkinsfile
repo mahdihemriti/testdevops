@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        SONAR_TOKEN = credentials('sonar-token')
+    }
+
     stages {
         stage("Git Checkout") {
             steps {
@@ -21,12 +25,13 @@ pipeline {
                 sh 'mvn test'
             }
         }
+
         stage("SonarQube Analysis") {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                sh "mvn sonar:sonar -Dsonar.projectKey=testdevops -Dsonar.login=$SONAR_TOKEN"
-                        }
-                    }
-
+                    sh "mvn sonar:sonar -Dsonar.projectKey=kaddem -Dsonar.login=$SONAR_TOKEN"
+                }
+            }
+        }
     }
 }

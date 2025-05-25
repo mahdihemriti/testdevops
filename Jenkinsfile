@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         SONAR_TOKEN = credentials('sonar-token')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
 
     stages {
@@ -38,5 +39,27 @@ pipeline {
                 sh "mvn deploy -DskipTests"
             }
         }
+        stage("Build Docker Image") {
+            steps {
+                sh 'docker build -t mahdihemriti/eventsproject:latest .'
+            }
+        }
+        stage("Push Docker Image to DockerHub") {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                      echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                      docker push mahdihemriti/eventsproject:latest
+                    """
+                }
+            }
+            }
+            stage("Run Docker Compose") {
+                steps {
+                                    sh 'docker-compose down || true'
+                                    sh 'docker-compose up -d'
+                }
+            }
+
     }
 }

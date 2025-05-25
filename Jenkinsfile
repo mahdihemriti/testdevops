@@ -22,14 +22,14 @@ pipeline {
 
         stage("Run Unit Tests") {
             steps {
-                sh 'mvn test'
+                sh 'mvn clean verify'
             }
         }
 
         stage("SonarQube Analysis") {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh "mvn sonar:sonar -Dsonar.projectKey=kaddem -Dsonar.login=$SONAR_TOKEN"
+                    sh "mvn sonar:sonar -Dsonar.projectKey=kaddem -Dsonar.login=$SONAR_TOKEN -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml"
                 }
             }
         }

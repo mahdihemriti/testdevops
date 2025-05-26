@@ -25,6 +25,6 @@ public class Participant implements Serializable {
     Tache tache;
     @ManyToMany
     @JsonIgnore
-    Set<Event> events;
+    private Set<Event> events;
 
 }

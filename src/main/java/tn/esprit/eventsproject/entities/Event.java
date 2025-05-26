@@ -25,9 +25,9 @@ public class Event implements Serializable {
     float cout;
     @ManyToMany(mappedBy = "events")
     @JsonIgnore
-    Set<Participant> participants;
+    private Set<Participant> participants;
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    Set<Logistics> logistics;
+    private Set<Logistics> logistics;
 
 }

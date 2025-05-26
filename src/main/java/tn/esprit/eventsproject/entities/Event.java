@@ -1,5 +1,6 @@
 package tn.esprit.eventsproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,8 +24,10 @@ public class Event implements Serializable {
     LocalDate dateFin;
     float cout;
     @ManyToMany(mappedBy = "events")
-    transient Set<Participant> participants;
+    @JsonIgnore
+    Set<Participant> participants;
     @OneToMany(fetch = FetchType.EAGER)
-    transient Set<Logistics> logistics;
+    @JsonIgnore
+    Set<Logistics> logistics;
 
 }
